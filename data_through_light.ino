@@ -2,6 +2,7 @@ const int UPPER = 350;
 const int MORSELENGTH = 30;
 int count = 0;
 bool lastState = false;
+String message = "";
 
 void setup(){
   Serial.begin(9600);
@@ -9,6 +10,9 @@ void setup(){
 
 bool check() {
   return (UPPER < analogRead(A0));
+}
+void convertToEnglish(String message) {
+  Serial.print(message);
 }
 
 void loop() {
@@ -18,14 +22,19 @@ void loop() {
     // something changed
     if (lastState) {
       if (count > MORSELENGTH) {
-        Serial.print("_ ");
+        //Serial.print("_ ");
+        message += "_";
       } else {
-        Serial.print(". ");
+        //Serial.print(". ");
+        message += ".";
       }
-    } else if (count > MORSELENGTH * 3) {
-      Serial.print("     ");
     }
-  count = 0;
-  lastState = check();
+    count = 0;
+    lastState = check();
+  }
+  if (count > MORSELENGTH * 3) {
+      //Serial.print("     ");
+      convertToEnglish(message);
+      message = "";
   }
 }
